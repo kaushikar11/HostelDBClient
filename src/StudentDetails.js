@@ -15,6 +15,8 @@ const StudentDetails = () => {
     const [updatedStudent, setUpdatedStudent] = useState({});
     const [imageUrl, setImageUrl] = useState(''); // State to hold the image URL
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         const fetchStudent = async () => {
@@ -62,66 +64,133 @@ const StudentDetails = () => {
         }
     };
 
-    const generatePDF = () => {
-        const doc = new jsPDF();
+    const generatePDF = async () => {
+        setLoading(true); 
+        setProgress(0);
+        // Create the LaTeX document as a string
+        const latexContent = String.raw`
+    \documentclass{article}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{lipsum} % For mock text
+\usepackage{booktabs} % For better table lines
+\usepackage{array} % For custom column widths
+\usepackage{multirow} % For multi-row cells
 
-        doc.setFontSize(20);
-        doc.text(`Student Details: ${student.name}`, 20, 20);
+\begin{document}
 
-        const details = [
-            `Name: ${student.name}`,
-            `Roll Number: ${student.rollNo}`,
-            `Caste: ${student.caste}`,
-            `Community: ${student.community}`,
-            `Class, Branch, Section: ${student.classBranchSection}`,
-            `Year of Study: ${student.yearOfStudy}`,
-            `Father's Name: ${student.fatherName}`,
-            `Father's Occupation: ${student.fatherOccupation}`,
-            `Father's Income: ${student.fatherIncome}`,
-            `Father's Mobile: ${student.fatherMobile}`,
-            `Mother's Name: ${student.motherName}`,
-            `Mother's Occupation: ${student.motherOccupation}`,
-            `Mother's Income: ${student.motherIncome}`,
-            `Mother's Mobile: ${student.motherMobile}`,
-            `Residential Address Line 1: ${student.residentialAddress1}`,
-            `Residential Address Line 2: ${student.residentialAddress2}`,
-            `Residential Address Line 3: ${student.residentialAddress3}`,
-            `Residential City: ${student.residentialCity}`,
-            `Residential State: ${student.residentialState}`,
-            `Residential Pincode: ${student.residentialPincode}`,
-            `Local Guardian Name: ${student.localGuardianName}`,
-            `Local Guardian Address Line 1: ${student.localGuardianAddress1}`,
-            `Local Guardian Address Line 2: ${student.localGuardianAddress2}`,
-            `Local Guardian Address Line 3: ${student.localGuardianAddress3}`,
-            `Local Guardian City: ${student.localGuardianCity}`,
-            `Local Guardian State: ${student.localGuardianState}`,
-            `Local Guardian Pincode: ${student.localGuardianPincode}`,
-            `Local Guardian Mobile: ${student.localGuardianMobile}`,
-            `Siblings: ${student.siblings}`,
-            `Student Email: ${student.studentEmail}`,
-            `Student Mobile: ${student.studentMobile}`,
-            `Religion: ${student.religion}`,
-            `Blood Group: ${student.bloodGroup}`,
-            `Allergies: ${student.allergies}`,
-            `Health Problems: ${student.healthProblems}`
-        ];
+\title{Student Details: ${student.name}$}
+\author{}
+\date{}
+\maketitle
 
-        let y = 30;
-        details.forEach((detail) => {
-            doc.setFontSize(12);
-            doc.text(detail, 20, y);
-            y += 10;
-        });
+\section*{Student Information}
 
-        doc.save(`${student.name}_Details.pdf`);
+\begin{tabular}{@{}>{\bfseries}m{4cm} m{10cm}@{}}
+    \toprule
+    Name & ${student.name}$ \\
+    \midrule
+    Roll Number & ${student.rollNo}$ \\
+    Caste & ${student.caste}$ \\
+    Community & ${student.community}$ \\
+    Class, Branch, Section & ${student.classBranchSection}$ \\
+    Year of Study & ${student.yearOfStudy}$ \\
+    \midrule
+    Father's Name & ${student.fatherName}$ \\
+    Father's Occupation & ${student.fatherOccupation}$ \\
+    Father's Income & ${student.fatherIncome}$ \\
+    Father's Mobile & ${student.fatherMobile}$ \\
+    \midrule
+    Mother's Name & ${student.motherName}$ \\
+    Mother's Occupation & ${student.motherOccupation}$ \\
+    Mother's Income & ${student.motherIncome}$ \\
+    Mother's Mobile & ${student.motherMobile}$ \\
+    \midrule
+    Residential Address & ${student.residentialAddress1}, ${student.residentialAddress2}, ${student.residentialAddress3}$ \\
+    Residential City & ${student.residentialCity}$ \\
+    Residential State & ${student.residentialState}$ \\
+    Residential Pincode & ${student.residentialPincode}$ \\
+    \midrule
+    Local Guardian Name & ${student.localGuardianName}$ \\
+    Local Guardian Address & ${student.localGuardianAddress1}, ${student.localGuardianAddress2}, ${student.localGuardianAddress3}$ \\
+    Local Guardian City & ${student.localGuardianCity}$ \\
+    Local Guardian State & ${student.localGuardianState}$ \\
+    Local Guardian Pincode & ${student.localGuardianPincode}$ \\
+    Local Guardian Mobile & ${student.localGuardianMobile}$ \\
+    \midrule
+    Siblings & ${student.siblings}$ \\
+    Student Email & ${student.studentEmail}$ \\
+    Student Mobile & ${student.studentMobile}$ \\
+    Religion & ${student.religion}$ \\
+    Blood Group & ${student.bloodGroup}$ \\
+    Allergies & ${student.allergies}$ \\
+    Health Problems & ${student.healthProblems}$ \\
+    \bottomrule
+\end{tabular}
+
+\end{document}
+
+    `;
+    
+        console.log(latexContent);
+    
+        try {
+
+
+            let simulatedProgress = 0;
+        const interval = setInterval(() => {
+            simulatedProgress += 10;
+            if (simulatedProgress >= 100) {
+                clearInterval(interval);
+            }
+            setProgress(simulatedProgress);
+        }, 300); // Adjust the interval time for your needs
+
+            // Send the LaTeX code to the API to get the PDF
+            const response = await fetch('https://latextopdf-v1.onrender.com/convert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ latex: latexContent }),
+            });
+            console.log(response);
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`API request failed with status ${response.status}: ${text}`);
+            }
+    
+            const pdfBlob = await response.blob(); // Read the response body once
+            console.log(pdfBlob); // Log the Blob object
+    
+            const url = window.URL.createObjectURL(pdfBlob); // Create a URL from the Blob
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${student.name}_${student.rollNo}.pdf`; // Set the filename for download
+            document.body.appendChild(link); // Append link to the body
+            link.click(); // Programmatically click the link to download
+            link.remove(); // Remove the link from the DOM
+    
+            clearInterval(interval); // Clear progress interval on success
+            setProgress(100); 
+            // Optional: Release the URL object after the download
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        }finally {
+            setLoading(false); // Stop loading animation
+        }
     };
+    
 
     return (
         <div className="student-details-container">
             {student ? (
                 <div className="student-details">
                     <h1>Student Details</h1>
+                    <div className="student-image-container">
                     {imageUrl && <img src={imageUrl} alt="Student" className="student-image" />} {/* Display student image */}
+                    </div>
                     {isEditing ? (
                         <form className="student-form">
                             <label>
@@ -515,16 +584,29 @@ const StudentDetails = () => {
                         </div>
                     )}
                     <div className="student-actions">
+                    {!isEditing && <button className="back" onClick={() => navigate('/home')}>Back</button>}
                         {isEditing ? (
-                            <button onClick={handleUpdate}>Save</button>
-                        ) : (
-                            <button onClick={() => setIsEditing(true)}>Edit</button>
-                        )}
-                        <button onClick={handleDelete}>Delete</button>
-                        <button onClick={generatePDF}>Download PDF</button>
-                        {!isEditing && <button onClick={() => navigate('/root')}>Back</button>}
-                    </div>
+                            <button className="edit" onClick={handleUpdate}>Save</button>
+                                ) : (
+                            <button className="edit" onClick={() => setIsEditing(true)}>Edit</button>
+                                )}
+                            <button className="delete" onClick={handleDelete}>Delete</button>
+                            
+                            {loading ? (
+                    <div className="spinner"></div>
+                ) : (
+                    <button className="download" onClick={generatePDF}>Download PDF</button>
+                )}
+            </div>
+
+            {loading && (
+                <div className="loading-bar-container">
+                    <div className="loading-bar" style={{ width: `${progress}%` }}></div>
                 </div>
+            )}
+
+                    </div>
+
             ) : (
                 <p>Loading student details...</p>
             )}

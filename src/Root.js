@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
 import Axios from 'axios';
 import SearchComponent from './SearchComponent';
 import { storage } from "./firebase";
@@ -61,7 +60,6 @@ const Root = () => {
 
     return (
         <div className="home-container">
-            <Navbar />
             <div className="search-container">
                 <SearchComponent
                     data={studentList}

@@ -1,96 +1,78 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebase'; // Import Firebase auth instance
+import './Login.css'; // Import CSS for styling
 
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const navigate = useNavigate(); // Initialize useNavigate
 
-import { auth } from "./firebase";
-
-const Login = ({ user }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSignUpActive, setIsSignUpActive] = useState(true);
-  const handleMethodChange = () => {
-    setIsSignUpActive(!isSignUpActive);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(''); // Reset any previous error
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('User logged in');
+      setIsLoggedIn(true); // Set login state to true
+    } catch (err) {
+      setError('Invalid email or password');
+      console.log(err);
+    }
   };
 
-  const handleSignUp = () => {
-    if (!email || !password) return;
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  };
+  // Effect to redirect user if logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/home'); // Redirect to /home on successful login
+    }
+  }, [isLoggedIn, navigate]); // Dependency array includes isLoggedIn
 
-  const handleSignIn = () => {
-    if (!email || !password) return;
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  };
-
-  const handleEmailChange = (event) => setEmail(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
-
-  if (user) {
-    return <Navigate to="/home"></Navigate>;
-  }
   return (
-    <section>
-      <h2>Homepage</h2>
-      <form>
-        {isSignUpActive && <legend>Sign Up</legend>}
-        {!isSignUpActive && <legend>Sign In</legend>}
-
-        <fieldset>
-          <ul>
-            <li>
-              <label htmlFor="email">Email</label>
-              <input type="text" id="email" onChange={handleEmailChange} />
-            </li>
-            <li>
-              <label htmlFor="password">Password</label>
+    <div className="login-container">
+      <div className="login-card">
+        <h1>Warden Login</h1>
+        <form onSubmit={handleLogin}>
+          {error && <p className="error-message">{error}</p>}
+          <div className="input-container">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email" // Added id to link with the label
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email" // Improve usability
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="password">Password</label>
+            <div className="password-container">
               <input
-                type="password"
-                id="password"
-                onChange={handlePasswordChange}
+                id="password" // Added id to link with the label
+                type={showPassword ? 'text' : 'password'} // Toggle between text and password
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password" // Improve usability
               />
-            </li>
-          </ul>
-
-          {isSignUpActive && (
-            <button type="button" onClick={handleSignUp}>
-              Sign Up
-            </button>
-          )}
-          {!isSignUpActive && (
-            <button type="button" onClick={handleSignIn}>
-              Sign In
-            </button>
-          )}
-        </fieldset>
-        {isSignUpActive && <a onClick={handleMethodChange}>Login</a>}
-        {!isSignUpActive && (
-          <a onClick={handleMethodChange}>Create an account</a>
-        )}
-      </form>
-    </section>
+              <button 
+                type="button" 
+                className="toggle-password" 
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+          </div>
+          <button type="submit" className="login-button">Login</button>
+        </form>
+      </div>
+    </div>
   );
 };
 
