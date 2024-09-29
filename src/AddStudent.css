@@ -1,0 +1,145 @@
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../public/ladies-hostel.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    margin-bottom: 20px; /* Space between navbar and form */
+}
+
+.add-student-container {
+    background-color: rgba(255, 255, 255, 0.7); /* Background opacity */
+    padding: 50px 0; /* Adjust padding as needed */
+    margin-top:150px;
+    margin-bottom:150px;
+    border-radius : 10px;
+}
+
+.form-container {
+    max-width: 800px; /* Adjust maximum width of the form container */
+    margin: auto; /* Center align the form */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a rd effect */ 
+}
+
+.text-danger{
+    font-size:20px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333; /* Dark gray text color */
+    font-size: 18px;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    width: 100%;
+    border-color: #ced4da;
+}
+
+.form-check-input[type="radio"] {
+    width: 1.4em;
+    height: 1.4em;
+    margin-top: 0.3em; /* Adjust spacing as needed */
+    margin-right: 0.6em; /* Adjust spacing as needed */
+    margin-left: 0.6em;
+}
+
+.custom-file {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 38px;
+    margin-bottom: 10px;
+}
+
+.custom-file-input {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 38px;
+    margin: 0;
+    opacity: 0;
+}
+
+.custom-file-label {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 38px;
+    padding: 7px 12px;
+    font-size: 16px;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    line-height: 1.5;
+}
+
+.custom-file-input:focus ~ .custom-file-label {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Optional: Style for the label next to radio buttons */
+.form-check-label {
+    font-size: 16px; /* Adjust font size as needed */
+    margin-top: 0.3em; /* Adjust spacing as needed */
+    color: black;
+    margin-left: 50px;
+}
+.form-control:focus {
+    border-color: #4aa2ff; /* Focus state border color */
+    box-shadow: 0 0 0 0.4rem rgba(0, 123, 255, 0.25); /* Focus state shadow */
+}
+
+.checkbox-group {
+    margin-bottom: 10px;
+}
+
+.checkbox-group label {
+    margin-right: 20px;
+}
+
+.btn-primary {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.button-container .left-button {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 20px;
+}
+
+.button-container .right-button {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}

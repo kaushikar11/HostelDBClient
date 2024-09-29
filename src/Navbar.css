@@ -1,0 +1,72 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* Adjust the height as needed */
+    background-color: #fff;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px; /* Adjust the padding as needed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure Navbar is above other content */
+  }
+  
+  .logoContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 60px; /* Adjust the logo height as needed */
+    margin-right: 10px;
+  }
+  
+  .logoText {
+    font-size: 1.8rem; /* Adjust the font size of logo text as needed */
+    margin: 0 auto; /* Center the company name horizontally */
+    text-align: center;
+  }
+  
+  .linksContainer {
+    display: flex;
+    gap: 30px; /* Adjust the gap between links as needed */
+  }
+  
+  .link {
+    color: #333;
+    text-decoration: none;
+    font-size: 1.4rem; /* Adjust the font size of links as needed */
+    padding: 15px; /* Adjust the padding of links as needed */
+  }
+  
+
+  .nav-buttons {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-buttons li {
+    margin-right: 20px; /* Adjust spacing between buttons */
+  }
+  
+  .nav-button {
+    text-decoration: none;
+    padding: 10px 20px;
+    color: #fff; /* Button text color */
+    border: none;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background-color: brown; /* Darker background color on hover */
+  }
