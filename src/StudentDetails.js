@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
-import jsPDF from 'jspdf';
 import { storage } from './firebase'; // Import Firebase storage
 import { getDownloadURL, ref } from 'firebase/storage'; // Import required Firebase functions
 import './StudentDetails.css';
@@ -17,6 +16,7 @@ const StudentDetails = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [imageBlob, setImageBlob] = useState(null);
 
     useEffect(() => {
         const fetchStudent = async () => {
@@ -28,7 +28,11 @@ const StudentDetails = () => {
                 // Fetch image URL from Firebase Storage
                 const imageRef = ref(storage, `studentDetails/${response.data.rollNo}/passportsizephoto.jpg`);
                 const url = await getDownloadURL(imageRef);
-                setImageUrl(url);
+                const imageResponse = await fetch(url);
+                const blob = await imageResponse.blob();  // Get the Blob of the image
+                console.log(blob);
+                setImageBlob(blob);  // Store the Blob in state
+
             } catch (error) {
                 console.error('Error fetching student details or image URL:', error);
             }
@@ -36,6 +40,13 @@ const StudentDetails = () => {
 
         fetchStudent();
     }, [id]);
+
+    useEffect(() => {
+        if (imageBlob) {
+            console.log("Image Blob after state update:", imageBlob);
+        }
+    }, [imageBlob]);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -67,70 +78,113 @@ const StudentDetails = () => {
     const generatePDF = async () => {
         setLoading(true); 
         setProgress(0);
+        console.log(imageBlob);
         // Create the LaTeX document as a string
         const latexContent = String.raw`
-    \documentclass{article}
-\usepackage{geometry}
-\geometry{a4paper, margin=1in}
-\usepackage{lipsum} % For mock text
-\usepackage{booktabs} % For better table lines
-\usepackage{array} % For custom column widths
-\usepackage{multirow} % For multi-row cells
+\documentclass[a4paper]{article}
+\usepackage[margin=1cm]{geometry}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{catchfile}
+
+% Add these packages for URL image support
+\usepackage{catchfile}
+\usepackage{currfile}
+\usepackage{ifthen}
+
+
+\newcommand{\sectiontitle}[1]{\textbf{\large #1}}
+\newcommand{\fieldname}[1]{\textbf{#1:}}
+\newcommand{\fieldvalue}[1]{\texttt{#1}}
 
 \begin{document}
 
-\title{Student Details: ${student.name}$}
-\author{}
-\date{}
-\maketitle
+\begin{center}
+    \texttt{\Large\textbf{Student Details}}
+    
+ \vspace{0.5cm}
+% Assuming the file is saved locally as 'student_photo.jpg'
+\includegraphics[width=0.3\textwidth]{temp/student-passport-photo.jpg}
 
-\section*{Student Information}
+    \vspace{0.5cm}
+    \texttt{\large\textbf{${student.name}}}
+\end{center}
 
-\begin{tabular}{@{}>{\bfseries}m{4cm} m{10cm}@{}}
-    \toprule
-    Name & ${student.name}$ \\
-    \midrule
-    Roll Number & ${student.rollNo}$ \\
-    Caste & ${student.caste}$ \\
-    Community & ${student.community}$ \\
-    Class, Branch, Section & ${student.classBranchSection}$ \\
-    Year of Study & ${student.yearOfStudy}$ \\
-    \midrule
-    Father's Name & ${student.fatherName}$ \\
-    Father's Occupation & ${student.fatherOccupation}$ \\
-    Father's Income & ${student.fatherIncome}$ \\
-    Father's Mobile & ${student.fatherMobile}$ \\
-    \midrule
-    Mother's Name & ${student.motherName}$ \\
-    Mother's Occupation & ${student.motherOccupation}$ \\
-    Mother's Income & ${student.motherIncome}$ \\
-    Mother's Mobile & ${student.motherMobile}$ \\
-    \midrule
-    Residential Address & ${student.residentialAddress1}, ${student.residentialAddress2}, ${student.residentialAddress3}$ \\
-    Residential City & ${student.residentialCity}$ \\
-    Residential State & ${student.residentialState}$ \\
-    Residential Pincode & ${student.residentialPincode}$ \\
-    \midrule
-    Local Guardian Name & ${student.localGuardianName}$ \\
-    Local Guardian Address & ${student.localGuardianAddress1}, ${student.localGuardianAddress2}, ${student.localGuardianAddress3}$ \\
-    Local Guardian City & ${student.localGuardianCity}$ \\
-    Local Guardian State & ${student.localGuardianState}$ \\
-    Local Guardian Pincode & ${student.localGuardianPincode}$ \\
-    Local Guardian Mobile & ${student.localGuardianMobile}$ \\
-    \midrule
-    Siblings & ${student.siblings}$ \\
-    Student Email & ${student.studentEmail}$ \\
-    Student Mobile & ${student.studentMobile}$ \\
-    Religion & ${student.religion}$ \\
-    Blood Group & ${student.bloodGroup}$ \\
-    Allergies & ${student.allergies}$ \\
-    Health Problems & ${student.healthProblems}$ \\
-    \bottomrule
-\end{tabular}
+\vspace{1cm}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+    \sectiontitle{Personal Information}
+    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Basic Details}} \\
+        \fieldname{Name} & \fieldvalue{${student.name}} \\
+        \fieldname{Roll Number} & \fieldvalue{${student.rollNo}} \\
+        \fieldname{Class, Branch, Section} & \fieldvalue{${student.classBranchSection}} \\
+        \fieldname{Year of Study} & \fieldvalue{${student.yearOfStudy}} \\
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Father's Details}} \\
+        \fieldname{Name} & \fieldvalue{${student.fatherName}} \\
+        \fieldname{Occupation} & \fieldvalue{${student.fatherOccupation}} \\
+        \fieldname{Mobile} & \fieldvalue{${student.fatherMobile}} \\
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Mother's Details}} \\
+        \fieldname{Name} & \fieldvalue{${student.motherName}} \\
+        \fieldname{Occupation} & \fieldvalue{${student.motherOccupation}} \\
+        \fieldname{Mobile} & \fieldvalue{${student.motherMobile}} \\
+    \end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \sectiontitle{Contact Information}
+    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Residential Address}} \\
+        \fieldname{Address Line 1} & \fieldvalue{${student.residentialAddress1}} \\
+        \fieldname{Line 2} & \fieldvalue{${student.residentialAddress2}} \\
+        \fieldname{Line 3} & \fieldvalue{${student.residentialAddress3}} \\
+        \fieldname{City} & \fieldvalue{${student.residentialCity}} \\
+        \fieldname{State} & \fieldvalue{${student.residentialState}} \\
+        \fieldname{Pincode} & \fieldvalue{${student.residentialPincode}} \\
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Student Contact}} \\
+        \fieldname{Email} & \fieldvalue{${student.studentEmail}} \\
+        \fieldname{Mobile} & \fieldvalue{${student.studentMobile}} \\
+    \end{tabular}
+\end{minipage}
+
+\vspace{1cm}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+    \sectiontitle{Additional Information}
+    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Siblings}} \\
+        \fieldname{Siblings} & \fieldvalue{${student.siblings}} \\
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Health Information}} \\
+        \fieldname{Blood Group} & \fieldvalue{${student.bloodGroup}} \\
+        \fieldname{Allergies} & \fieldvalue{${student.allergies}} \\
+        \fieldname{Health Problems} & \fieldvalue{${student.healthProblems}} \\
+    \end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \sectiontitle{Local Guardian Information}
+    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Guardian Details}} \\
+        \fieldname{Name} & \fieldvalue{${student.localGuardianName}} \\
+        \fieldname{Mobile} & \fieldvalue{${student.localGuardianMobile}} \\
+        \fieldname{Relationship} & \fieldvalue{${student.localGuardianRelationship}} \\
+        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Guardian Address}} \\
+        \fieldname{Line 1} & \fieldvalue{${student.localGuardianAddress1}} \\
+        \fieldname{Line 2} & \fieldvalue{${student.localGuardianAddress2}} \\
+        \fieldname{Line 3} & \fieldvalue{${student.localGuardianAddress3}} \\
+        \fieldname{City} & \fieldvalue{${student.localGuardianCity}} \\
+        \fieldname{State} & \fieldvalue{${student.localGuardianState}} \\
+        \fieldname{Pincode} & \fieldvalue{${student.localGuardianPincode}} \\
+    \end{tabular}
+\end{minipage}
 
 \end{document}
-
     `;
+        console.log(imageBlob);
     
         console.log(latexContent);
     
@@ -144,37 +198,44 @@ const StudentDetails = () => {
                 clearInterval(interval);
             }
             setProgress(simulatedProgress);
-        }, 300); // Adjust the interval time for your needs
-
-            // Send the LaTeX code to the API to get the PDF
-            const response = await fetch('https://latextopdf-v1.onrender.com/convert', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ latex: latexContent }),
-            });
-            console.log(response);
-            if (!response.ok) {
-                const text = await response.text();
-                throw new Error(`API request failed with status ${response.status}: ${text}`);
-            }
-    
-            const pdfBlob = await response.blob(); // Read the response body once
-            console.log(pdfBlob); // Log the Blob object
-    
-            const url = window.URL.createObjectURL(pdfBlob); // Create a URL from the Blob
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${student.name}_${student.rollNo}.pdf`; // Set the filename for download
-            document.body.appendChild(link); // Append link to the body
-            link.click(); // Programmatically click the link to download
-            link.remove(); // Remove the link from the DOM
-    
-            clearInterval(interval); // Clear progress interval on success
-            setProgress(100); 
-            // Optional: Release the URL object after the download
-            window.URL.revokeObjectURL(url);
+        }, 300); 
+        const formData = new FormData();
+        formData.append('latex', latexContent);  // Append LaTeX content
+        formData.append('image', imageBlob, 'student-passport-photo.jpg');  // Append the image blob
+        
+        const response = await fetch('https://latextopdfhosteldb.onrender.com/convert', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          console.log(response);
+          
+          // Check if the response is OK (status in the range 200-299)
+          if (!response.ok) {
+            const text = await response.text(); // Get the error message in text format
+            throw new Error(`API request failed with status ${response.status}: ${text}`);
+          }
+          
+          // Convert the response to a Blob (binary data for the PDF)
+          const pdfBlob = await response.blob();
+          console.log(pdfBlob); // Log the Blob object to see the binary data
+          
+          // Create a download link for the Blob
+          const url = window.URL.createObjectURL(pdfBlob); // Create a URL from the Blob
+          const link = document.createElement('a'); // Create a link element
+          link.href = url;
+          link.download = `${student.name}_${student.rollNo}.pdf`; // Set the filename for download
+          document.body.appendChild(link); // Append link to the body
+          link.click(); // Programmatically click the link to trigger download
+          link.remove(); // Remove the link from the DOM
+          
+          // Optional: Release the URL object after the download
+          window.URL.revokeObjectURL(url);
+          
+          // Clear the progress interval if necessary and update UI
+          clearInterval(interval);
+          setProgress(100); 
+          
         } catch (error) {
             console.error('Error generating PDF:', error);
         }finally {
