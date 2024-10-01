@@ -60,13 +60,6 @@ const Login = () => {
                 required
                 autoComplete="current-password" // Improve usability
               />
-              <button 
-                type="button" 
-                className="toggle-password" 
-                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
             </div>
           </div>
           <button type="submit" className="login-button">Login</button>

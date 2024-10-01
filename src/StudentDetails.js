@@ -203,7 +203,7 @@ const StudentDetails = () => {
         formData.append('latex', latexContent);  // Append LaTeX content
         formData.append('image', imageBlob, 'student-passport-photo.jpg');  // Append the image blob
         
-        const response = await fetch('https://latextopdfhosteldb.onrender.com/convert', {
+        const response = await fetch('https://latextopdfhosteldb.azurewebsites.net/convert', {
             method: 'POST',
             body: formData,
           });
