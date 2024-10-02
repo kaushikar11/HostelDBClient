@@ -3,7 +3,7 @@ import './AddStudent.css';
 import Axios from 'axios';
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore"; 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from './firebase'; // Ensure correct import path for your Firebase configuration
+import { db, storage } from './firebase/firebase'; // Ensure correct import path for your Firebase configuration
 
 const URL = process.env.REACT_APP_SERVER_URL;
 

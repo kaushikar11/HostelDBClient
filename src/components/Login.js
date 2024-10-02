@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase'; // Import Firebase auth instance
+import { auth } from './firebase/firebase'; // Import Firebase auth instance
 import './Login.css'; // Import CSS for styling
 
 const Login = () => {
@@ -9,7 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword]= useState(false); // State to toggle password visibility
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleLogin = async (e) => {

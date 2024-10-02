@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth } from "./firebase";
+import { auth } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -8,7 +8,8 @@ import Root from './Root';
 import AddStudent from './AddStudent';
 import StudentDetails from './StudentDetails';
 import { useState, useEffect } from 'react';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import { ProtectedRoute } from './ProtectedRoute';
+
 
 const App = () => {
   const [user, setUser] = useState(null);

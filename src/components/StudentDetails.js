@@ -1,27 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
-import { storage } from './firebase'; // Import Firebase storage
+import { storage } from './firebase/firebase'; // Import Firebase storage
 import { getDownloadURL, ref } from 'firebase/storage'; // Import required Firebase functions
 import './StudentDetails.css';
+import { generatePDF } from './functions/generatePDF';
+import { useDispatch, useSelector } from 'react-redux';
 
-const URL = process.env.REACT_APP_SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 
 const StudentDetails = () => {
     const { id } = useParams();
     const [student, setStudent] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [updatedStudent, setUpdatedStudent] = useState({});
-    const [imageUrl, setImageUrl] = useState(''); // State to hold the image URL
+    const [imageUrl] = useState(''); // State to hold the image URL
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [progress, setProgress] = useState(0);
     const [imageBlob, setImageBlob] = useState(null);
+    const dispatch = useDispatch();
+    const pdfUrl = useSelector((state) => state.pdf.pdfUrl);
+    const progress = useSelector((state) => state.pdf.progress); // Assuming you have progress in your slice
+    const [successMessage, setSuccessMessage] = useState('');
+    
+    const handleDownloadPDF = async () => {
+        setLoading(true);  // Set loading state to true
+        setSuccessMessage('');
+        console.log('Download PDF button clicked.'); // Debug log
+    
+        try {
+            // Dispatch the generatePDF action and wait for it to complete
+            await dispatch(generatePDF({ imageBlob, student })); 
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        } finally {
+            setSuccessMessage('PDF has been generated successfully!');
+            setLoading(false); // Set loading to false after completion
+        }
+    };
+    
+    useEffect(() => {
+        // Clean up function to revoke object URL
+        return () => {
+            if (pdfUrl) {
+                try {
+                    URL.revokeObjectURL(pdfUrl);
+                } catch (e) {
+                    console.error('Failed to revoke object URL:', e);
+                }
+            }
+        };
+    }, [pdfUrl]);
 
     useEffect(() => {
         const fetchStudent = async () => {
             try {
-                const response = await Axios.get(`${URL}/student/${id}`);
+                const response = await Axios.get(`${SERVER_URL}/student/${id}`);
                 setStudent(response.data);
                 setUpdatedStudent(response.data);
 
@@ -58,7 +93,7 @@ const StudentDetails = () => {
 
     const handleUpdate = async () => {
         try {
-            await Axios.put(`${URL}/update-student/${id}`, updatedStudent);
+            await Axios.put(`${SERVER_URL}/update-student/${id}`, updatedStudent);
             setStudent(updatedStudent);
             setIsEditing(false);
         } catch (error) {
@@ -68,180 +103,13 @@ const StudentDetails = () => {
 
     const handleDelete = async () => {
         try {
-            await Axios.delete(`${URL}/delete-student/${id}`);
+            await Axios.delete(`${SERVER_URL}/delete-student/${id}`);
             navigate('/root');
         } catch (error) {
             console.error('Error deleting student:', error);
         }
     };
 
-    const generatePDF = async () => {
-        setLoading(true); 
-        setProgress(0);
-        console.log(imageBlob);
-        // Create the LaTeX document as a string
-        const latexContent = String.raw`
-\documentclass[a4paper]{article}
-\usepackage[margin=1cm]{geometry}
-\usepackage{array}
-\usepackage{xcolor}
-\usepackage{colortbl}
-\usepackage{graphicx}
-\usepackage{catchfile}
-
-% Add these packages for URL image support
-\usepackage{catchfile}
-\usepackage{currfile}
-\usepackage{ifthen}
-
-
-\newcommand{\sectiontitle}[1]{\textbf{\large #1}}
-\newcommand{\fieldname}[1]{\textbf{#1:}}
-\newcommand{\fieldvalue}[1]{\texttt{#1}}
-
-\begin{document}
-
-\begin{center}
-    \texttt{\Large\textbf{Student Details}}
-    
- \vspace{0.5cm}
-% Assuming the file is saved locally as 'student_photo.jpg'
-\includegraphics[width=0.3\textwidth]{temp/student-passport-photo.jpg}
-
-    \vspace{0.5cm}
-    \texttt{\large\textbf{${student.name}}}
-\end{center}
-
-\vspace{1cm}
-
-\noindent
-\begin{minipage}[t]{0.48\textwidth}
-    \sectiontitle{Personal Information}
-    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Basic Details}} \\
-        \fieldname{Name} & \fieldvalue{${student.name}} \\
-        \fieldname{Roll Number} & \fieldvalue{${student.rollNo}} \\
-        \fieldname{Class, Branch, Section} & \fieldvalue{${student.classBranchSection}} \\
-        \fieldname{Year of Study} & \fieldvalue{${student.yearOfStudy}} \\
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Father's Details}} \\
-        \fieldname{Name} & \fieldvalue{${student.fatherName}} \\
-        \fieldname{Occupation} & \fieldvalue{${student.fatherOccupation}} \\
-        \fieldname{Mobile} & \fieldvalue{${student.fatherMobile}} \\
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Mother's Details}} \\
-        \fieldname{Name} & \fieldvalue{${student.motherName}} \\
-        \fieldname{Occupation} & \fieldvalue{${student.motherOccupation}} \\
-        \fieldname{Mobile} & \fieldvalue{${student.motherMobile}} \\
-    \end{tabular}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-    \sectiontitle{Contact Information}
-    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Residential Address}} \\
-        \fieldname{Address Line 1} & \fieldvalue{${student.residentialAddress1}} \\
-        \fieldname{Line 2} & \fieldvalue{${student.residentialAddress2}} \\
-        \fieldname{Line 3} & \fieldvalue{${student.residentialAddress3}} \\
-        \fieldname{City} & \fieldvalue{${student.residentialCity}} \\
-        \fieldname{State} & \fieldvalue{${student.residentialState}} \\
-        \fieldname{Pincode} & \fieldvalue{${student.residentialPincode}} \\
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Student Contact}} \\
-        \fieldname{Email} & \fieldvalue{${student.studentEmail}} \\
-        \fieldname{Mobile} & \fieldvalue{${student.studentMobile}} \\
-    \end{tabular}
-\end{minipage}
-
-\vspace{1cm}
-
-\noindent
-\begin{minipage}[t]{0.48\textwidth}
-    \sectiontitle{Additional Information}
-    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Siblings}} \\
-        \fieldname{Siblings} & \fieldvalue{${student.siblings}} \\
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Health Information}} \\
-        \fieldname{Blood Group} & \fieldvalue{${student.bloodGroup}} \\
-        \fieldname{Allergies} & \fieldvalue{${student.allergies}} \\
-        \fieldname{Health Problems} & \fieldvalue{${student.healthProblems}} \\
-    \end{tabular}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-    \sectiontitle{Local Guardian Information}
-    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.4\linewidth} p{0.6\linewidth} @{}}
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Guardian Details}} \\
-        \fieldname{Name} & \fieldvalue{${student.localGuardianName}} \\
-        \fieldname{Mobile} & \fieldvalue{${student.localGuardianMobile}} \\
-        \fieldname{Relationship} & \fieldvalue{${student.localGuardianRelationship}} \\
-        \rowcolor[gray]{0.9} \multicolumn{2}{l}{\textbf{Guardian Address}} \\
-        \fieldname{Line 1} & \fieldvalue{${student.localGuardianAddress1}} \\
-        \fieldname{Line 2} & \fieldvalue{${student.localGuardianAddress2}} \\
-        \fieldname{Line 3} & \fieldvalue{${student.localGuardianAddress3}} \\
-        \fieldname{City} & \fieldvalue{${student.localGuardianCity}} \\
-        \fieldname{State} & \fieldvalue{${student.localGuardianState}} \\
-        \fieldname{Pincode} & \fieldvalue{${student.localGuardianPincode}} \\
-    \end{tabular}
-\end{minipage}
-
-\end{document}
-    `;
-        console.log(imageBlob);
-    
-        console.log(latexContent);
-    
-        try {
-
-
-            let simulatedProgress = 0;
-        const interval = setInterval(() => {
-            simulatedProgress += 10;
-            if (simulatedProgress >= 100) {
-                clearInterval(interval);
-            }
-            setProgress(simulatedProgress);
-        }, 300); 
-        const formData = new FormData();
-        formData.append('latex', latexContent);  // Append LaTeX content
-        formData.append('image', imageBlob, 'student-passport-photo.jpg');  // Append the image blob
-        
-        const response = await fetch('https://latextopdfhosteldb.azurewebsites.net/convert', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          console.log(response);
-          
-          // Check if the response is OK (status in the range 200-299)
-          if (!response.ok) {
-            const text = await response.text(); // Get the error message in text format
-            throw new Error(`API request failed with status ${response.status}: ${text}`);
-          }
-          
-          // Convert the response to a Blob (binary data for the PDF)
-          const pdfBlob = await response.blob();
-          console.log(pdfBlob); // Log the Blob object to see the binary data
-          
-          // Create a download link for the Blob
-          const url = window.URL.createObjectURL(pdfBlob); // Create a URL from the Blob
-          const link = document.createElement('a'); // Create a link element
-          link.href = url;
-          link.download = `${student.name}_${student.rollNo}.pdf`; // Set the filename for download
-          document.body.appendChild(link); // Append link to the body
-          link.click(); // Programmatically click the link to trigger download
-          link.remove(); // Remove the link from the DOM
-          
-          // Optional: Release the URL object after the download
-          window.URL.revokeObjectURL(url);
-          
-          // Clear the progress interval if necessary and update UI
-          clearInterval(interval);
-          setProgress(100); 
-          
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-        }finally {
-            setLoading(false); // Stop loading animation
-        }
-    };
     
 
     return (
@@ -645,27 +513,41 @@ const StudentDetails = () => {
                         </div>
                     )}
                     <div className="student-actions">
-                    {!isEditing && <button className="back" onClick={() => navigate('/home')}>Back</button>}
+                        {!isEditing && (
+                          <button className="back" onClick={() => navigate('/home')}>Back</button>
+                        )}
+
                         {isEditing ? (
-                            <button className="edit" onClick={handleUpdate}>Save</button>
-                                ) : (
-                            <button className="edit" onClick={() => setIsEditing(true)}>Edit</button>
-                                )}
-                            <button className="delete" onClick={handleDelete}>Delete</button>
-                            
-                            {loading ? (
-                    <div className="spinner"></div>
-                ) : (
-                    <button className="download" onClick={generatePDF}>Download PDF</button>
-                )}
-            </div>
+                          <button className="edit" onClick={handleUpdate}>Save</button>
+                        ) : (
+                          <button className="edit" onClick={() => setIsEditing(true)}>Edit</button>
+                        )}
 
-            {loading && (
-                <div className="loading-bar-container">
-                    <div className="loading-bar" style={{ width: `${progress}%` }}></div>
-                </div>
-            )}
+                        <button className="delete" onClick={handleDelete}>Delete</button>
 
+                        {loading ? (
+                          <>
+                            <div className="spinner"></div>
+                          </>
+                        ) : (
+                          <>
+                            <button className="download" onClick={handleDownloadPDF}>Generate PDF</button>
+                            {pdfUrl && (
+                              <a href={pdfUrl} download={`${student.name}_${student.rollNo}.pdf`} className="download">Download PDF</a>
+                            )}
+                          </>
+                        )}
+                        <br /><br />
+                      </div>
+                      {loading && (
+                        <div className="loading-bar-container">
+                              <div className="loading-bar" style={{ width: `${progress}%` }}></div>
+                              <span className="loading-percentage">{progress}%</span>
+                        </div>
+                        )}
+                        <div clasName="success-message">
+                        {successMessage && <div className="success-message">{successMessage}</div>}
+                        </div>
                     </div>
 
             ) : (

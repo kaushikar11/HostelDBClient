@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import SearchComponent from './SearchComponent';
-import { storage } from "./firebase";
+import { storage } from "./firebase/firebase";
 import { getDownloadURL, ref } from 'firebase/storage';
 import './Root.css';
 
 const URL = process.env.REACT_APP_SERVER_URL;
 
 const Root = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [studentList, setStudentList] = useState([]);
     const [error, setError] = useState(null);

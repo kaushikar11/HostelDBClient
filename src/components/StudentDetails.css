@@ -198,30 +198,69 @@
     transform: scale(0.95); /* Slightly shrink on click */
 }
 
-.spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 4px solid #2196f3; /* Spinner color */
-    width: 20px;
+.loading-bar-container {
+    position: relative;
+    width: 100%;
     height: 20px;
-    animation: spin 1s linear infinite; /* Animation */
-}
-
-@keyframes spin {
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  
+  .loading-bar {
+    height: 100%;
+    background-color: #4caf50; /* Green */
+    transition: width 0.5s ease; /* Smooth transition */
+  }
+  
+  .loading-percentage {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #000; /* Black color for the percentage text */
+    font-weight: bold;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite; /* Spinner animation */
+  }
+  
+  @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+
+  .success-message {
+    margin-top: 10px; /* Space above the success message */
+    color: #4caf50; /* Green color for success */
+    font-weight: bold; /* Bold text */
+    font-size: 1.1rem; /* Slightly larger font size */
+    background-color: #e8f5e9; /* Light green background */
+    border: 1px solid #4caf50; /* Green border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the message box */
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center content vertically */
 }
 
-.loading-bar-container {
-    width: 100%;
-    background-color: #f3f3f3; /* Light background for the loading bar */
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 10px; /* Space between buttons and loading bar */
+/* Optional: Add a fade-in animation for a smoother appearance */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-.loading-bar {
-    height: 5px; /* Height of the loading bar */
-    background-color: #2196f3; /* Blue color for the loading progress */
-    transition: width 0.3s ease; /* Smooth transition for width changes */
+.success-message {
+    animation: fadeIn 0.5s ease-in-out; /* Apply fade-in effect */
 }
