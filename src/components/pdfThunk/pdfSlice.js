@@ -1,12 +1,12 @@
 // src/pdfSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { generatePDF } from '../functions/generatePDF'; // Import the generatePDF thunk
+import { generatePDF } from '../functions/generatePDF'; 
 
 const pdfSlice = createSlice({
   name: 'pdf',
   initialState: {
     progress: 0,
-    pdfUrl: null, // Initialize pdfUrl to store the URL
+    pdfUrl: null, 
   },
   reducers: {
     setProgress: (state, action) => {
@@ -16,10 +16,10 @@ const pdfSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(generatePDF.fulfilled, (state, action) => {
-        state.pdfUrl = action.payload.pdfUrl; // Store the PDF URL
+        state.pdfUrl = action.payload.pdfUrl; 
       })
       .addCase(generatePDF.rejected, (state) => {
-        state.progress = 0; // Reset progress on error
+        state.progress = 0; 
       });
   },
 });

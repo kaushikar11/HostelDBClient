@@ -1,36 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase/firebase'; // Import Firebase auth instance
-import './Login.css'; // Import CSS for styling
+import { auth } from './firebase/firebase';
+import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const passwordRef = useRef(null);
   const [error, setError] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-  const [showPassword]= useState(false); // State to toggle password visibility
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(''); // Reset any previous error
+    setError('');
+    const password = passwordRef.current.value;
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log('User logged in');
-      setIsLoggedIn(true); // Set login state to true
+      setIsLoggedIn(true);
     } catch (err) {
       setError('Invalid email or password');
-      console.log(err);
     }
   };
 
-  // Effect to redirect user if logged in
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/home'); // Redirect to /home on successful login
+      navigate('/home');
     }
-  }, [isLoggedIn, navigate]); // Dependency array includes isLoggedIn
+  }, [isLoggedIn, navigate]);
 
   return (
     <div className="login-container">
@@ -41,25 +39,30 @@ const Login = () => {
           <div className="input-container">
             <label htmlFor="email">Email</label>
             <input
-              id="email" // Added id to link with the label
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              autoComplete="email" // Improve usability
+              autoComplete="email"
             />
           </div>
           <div className="input-container">
             <label htmlFor="password">Password</label>
             <div className="password-container">
               <input
-                id="password" // Added id to link with the label
-                type={showPassword ? 'text' : 'password'} // Toggle between text and password
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                ref={passwordRef}
                 required
-                autoComplete="current-password" // Improve usability
+                autoComplete="current-password"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
             </div>
           </div>
           <button type="submit" className="login-button">Login</button>

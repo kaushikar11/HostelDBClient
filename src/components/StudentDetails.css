@@ -249,8 +249,22 @@
     padding: 10px; /* Padding inside the message box */
     display: flex; /* Flexbox for centering */
     align-items: center; /* Center content vertically */
+    animation: fadeIn 0.5s ease-in-out;
 }
 
+  .error-message {
+    margin-top: 10px; /* Space above the success message */
+    color: #ff0000; /* Green color for success */
+    font-weight: bold; /* Bold text */
+    font-size: 1.1rem; /* Slightly larger font size */
+    background-color: #fdd6d6; /* Light green background */
+    border: 1px solid #ff0000; /* Green border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the message box */
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center content vertically */
+    animation: fadeIn 0.5s ease-in-out;
+}
 /* Optional: Add a fade-in animation for a smoother appearance */
 @keyframes fadeIn {
     from {
@@ -261,6 +275,4 @@
     }
 }
 
-.success-message {
-    animation: fadeIn 0.5s ease-in-out; /* Apply fade-in effect */
-}
+

@@ -118,7 +118,7 @@ const AddStudent = () => {
 
         try {
             // Add form data to Firestore
-            const response = await Axios.post(`${URL}/add-student`, formData);
+            const response = await Axios.post(`${URL}/api/students/add-student`, formData);
             console.log('Student added successfully:', response.data);
 
             const docRef = await addDoc(collection(db, "students"), formData);

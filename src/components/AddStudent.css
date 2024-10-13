@@ -11,12 +11,17 @@ body {
     margin-bottom: 20px; /* Space between navbar and form */
 }
 
+.container{
+    display: inline-block;
+    margin-right: 100px;
+}
 .add-student-container {
     background-color: rgba(255, 255, 255, 0.7); /* Background opacity */
     padding: 50px 0; /* Adjust padding as needed */
     margin-top:150px;
     margin-bottom:150px;
     border-radius : 10px;
+    display: inline-block;
 }
 
 .form-container {
@@ -138,7 +143,7 @@ body {
     margin-left: 20px;
 }
 
-.button-container .right-button {
+.button-container .right-button {  
     flex: 1;
     display: flex;
     justify-content: flex-end;

@@ -42,7 +42,7 @@ const Root = () => {
             fetchFileUrls();
         }
         // Fetch student list from the server
-        Axios.get(`${URL}/read`)
+        Axios.get(`${URL}/api/students/read`)
             .then((response) => {
                 setStudentList(response.data);
             })

@@ -6,9 +6,11 @@ import { getDownloadURL, ref } from 'firebase/storage'; // Import required Fireb
 import './StudentDetails.css';
 import { generatePDF } from './functions/generatePDF';
 import { useDispatch, useSelector } from 'react-redux';
+import { startGeneratingPDF } from './pdfThunk/actions';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
+console.log(SERVER_URL);
 
 const StudentDetails = () => {
     const { id } = useParams();
@@ -21,27 +23,37 @@ const StudentDetails = () => {
     const [imageBlob, setImageBlob] = useState(null);
     const dispatch = useDispatch();
     const pdfUrl = useSelector((state) => state.pdf.pdfUrl);
-    const progress = useSelector((state) => state.pdf.progress); // Assuming you have progress in your slice
+    const progress = useSelector((state) => state.pdf.progress); 
     const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     
     const handleDownloadPDF = async () => {
-        setLoading(true);  // Set loading state to true
-        setSuccessMessage('');
-        console.log('Download PDF button clicked.'); // Debug log
-    
+        setLoading(true); // Show loading indicator
+        setSuccessMessage(''); // Reset success message
+        setErrorMessage(''); // Reset error message
+        console.log('Download PDF button clicked.');
+      
         try {
-            // Dispatch the generatePDF action and wait for it to complete
-            await dispatch(generatePDF({ imageBlob, student })); 
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-        } finally {
+          const result = await dispatch(startGeneratingPDF({ imageBlob, student }));
+      
+          if (result && result.payload) {
+            const { pdfUrl } = result.payload;
             setSuccessMessage('PDF has been generated successfully!');
-            setLoading(false); // Set loading to false after completion
+          } else {
+            setErrorMessage('Failed to generate PDF. Please try again.'); // Show error message
+          }
+        } catch (error) {
+          console.error('Error generating PDF:', error);
+          setErrorMessage('Failed to generate PDF. Please try again.'); // Show error message if something goes wrong
+        } finally {
+          setLoading(false); // Hide loading indicator
         }
-    };
+      };
+      
+
+    
     
     useEffect(() => {
-        // Clean up function to revoke object URL
         return () => {
             if (pdfUrl) {
                 try {
@@ -56,7 +68,7 @@ const StudentDetails = () => {
     useEffect(() => {
         const fetchStudent = async () => {
             try {
-                const response = await Axios.get(`${SERVER_URL}/student/${id}`);
+                const response = await Axios.get(`${SERVER_URL}/api/students/student/${id}`);
                 setStudent(response.data);
                 setUpdatedStudent(response.data);
 
@@ -93,7 +105,7 @@ const StudentDetails = () => {
 
     const handleUpdate = async () => {
         try {
-            await Axios.put(`${SERVER_URL}/update-student/${id}`, updatedStudent);
+            await Axios.put(`${SERVER_URL}/api/students/update-student/${id}`, updatedStudent);
             setStudent(updatedStudent);
             setIsEditing(false);
         } catch (error) {
@@ -103,7 +115,7 @@ const StudentDetails = () => {
 
     const handleDelete = async () => {
         try {
-            await Axios.delete(`${SERVER_URL}/delete-student/${id}`);
+            await Axios.delete(`${SERVER_URL}/api/students/delete-student/${id}`);
             navigate('/root');
         } catch (error) {
             console.error('Error deleting student:', error);
@@ -545,9 +557,22 @@ const StudentDetails = () => {
                               <span className="loading-percentage">{progress}%</span>
                         </div>
                         )}
-                        <div clasName="success-message">
-                        {successMessage && <div className="success-message">{successMessage}</div>}
-                        </div>
+                        <div className="messages">
+    {/* Show the success message if it exists */}
+    {successMessage && (
+        <div className="success-message">
+            {successMessage}
+        </div>
+    )}
+
+    {/* Show the error message only if there is no success message */}
+    {!successMessage && errorMessage && (
+        <div className="error-message">
+            {errorMessage}
+        </div>
+    )}
+</div>
+                    
                     </div>
 
             ) : (
