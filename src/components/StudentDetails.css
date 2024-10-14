@@ -1,0 +1,278 @@
+.student-details-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Main card styling */
+.student-details {
+    background-color: #f9f9f9; /* Lighter background for the card */
+    padding: 30px; /* More padding for a spacious look */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Header styling */
+.student-details h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5rem; /* Increased font size */
+    color: #333; /* Darker color for better readability */
+}
+
+/* Individual Detail Box */
+.detail-box {
+    background-color: #ffffff; /* White background for details */
+    padding: 15px;
+    margin-bottom: 15px; /* Space between detail boxes */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slight shadow */
+}
+
+/* Detail Box Title */
+.detail-box h2 {
+    font-size: 1.5rem; /* Font size for titles */
+    margin-bottom: 10px; /* Space below title */
+    color: #444; /* Dark color for titles */
+}
+
+/* Detail Box Content */
+.detail-box p {
+    font-size: 1.1rem; /* Font size for content */
+    color: #666; /* Lighter color for content */
+    margin: 0; /* Remove default margin */
+}
+
+
+/* Flex layout for student info */
+.student-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 1rem;
+    color: #1f1f1f; /* Medium color for the text */
+}
+
+/* Student info paragraph styling */
+.student-info p {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px; /* Added padding for spacing */
+    border-bottom: 1px solid #ddd; /* Added separator */
+}
+
+.student-info p:last-child {
+    border-bottom: none; /* Remove border from last item */
+}
+
+/* Bold text for labels */
+.student-info p strong {
+    color: #333; /* Darker color for labels */
+}
+
+/* Form layout */
+.student-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px; /* Add space before form */
+}
+
+/* Input styling */
+.student-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Form buttons */
+.student-form button {
+    padding: 10px;
+    background-color: #007bff; /* Button color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.student-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Container for student image */
+.student-image-container {
+    display: flex;
+    justify-content: center; /* Center the image */
+    margin-bottom: 20px; /* Space below the image */
+}
+
+/* Styling for the student image */
+.student-image {
+    width: 150px; /* Fixed width */
+    height: 150px; /* Fixed height */
+    border-radius: 50%; /* Circular image */
+    object-fit: cover; /* Cover the entire area without distortion */
+    border: 3px solid #007bff; /* Blue border around the image */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Optional: Responsive styles */
+@media (max-width: 768px) {
+    .student-image {
+        width: 120px; /* Smaller size on mobile */
+        height: 120px; /* Smaller size on mobile */
+    }
+}
+
+
+.student-actions {
+    display: flex;
+    justify-content: space-between; /* Aligns child elements with space in between */
+    align-items: center; /* Vertically centers items */
+    margin-top: 20px; /* Adds space above the button section */
+}
+
+
+/* Button styling */
+.student-actions button {
+    background: transparent; /* Transparent background */
+    border: 2px solid transparent; /* Transparent border to maintain size */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for the buttons */
+    font-size: 1rem; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Animation for hover effects */
+}
+
+/* Button color variations */
+.student-actions button.edit {
+    border-color: #4caf50; /* Green border */
+}
+
+.student-actions button.delete {
+    border-color: #f44336; /* Red border */
+}
+
+.student-actions button.download {
+    border-color: #2196f3; /* Blue border */
+}
+
+.student-actions button.back {
+    border-color: #000000; /* Black border */
+}
+
+/* Hover effects */
+.student-actions button:hover {
+    color: white; /* Make text white on hover */
+}
+
+/* Specific hover styles for each button */
+.student-actions button.edit:hover,
+.student-actions button.save:hover {
+    background-color: #4caf50; /* Green fill */
+}
+
+.student-actions button.delete:hover {
+    background-color: #f44336; /* Red fill */
+}
+
+.student-actions button.download:hover {
+    background-color: #2196f3; /* Blue fill */
+}
+
+.student-actions button.back:hover {
+    background-color: #000000; /* Black fill */
+}
+
+/* Click effect */
+.student-actions button:active {
+    transform: scale(0.95); /* Slightly shrink on click */
+}
+
+.loading-bar-container {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  
+  .loading-bar {
+    height: 100%;
+    background-color: #4caf50; /* Green */
+    transition: width 0.5s ease; /* Smooth transition */
+  }
+  
+  .loading-percentage {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #000; /* Black color for the percentage text */
+    font-weight: bold;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite; /* Spinner animation */
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+  .success-message {
+    margin-top: 10px; /* Space above the success message */
+    color: #4caf50; /* Green color for success */
+    font-weight: bold; /* Bold text */
+    font-size: 1.1rem; /* Slightly larger font size */
+    background-color: #e8f5e9; /* Light green background */
+    border: 1px solid #4caf50; /* Green border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the message box */
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center content vertically */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+  .error-message {
+    margin-top: 10px; /* Space above the success message */
+    color: #ff0000; /* Green color for success */
+    font-weight: bold; /* Bold text */
+    font-size: 1.1rem; /* Slightly larger font size */
+    background-color: #fdd6d6; /* Light green background */
+    border: 1px solid #ff0000; /* Green border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the message box */
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center content vertically */
+    animation: fadeIn 0.5s ease-in-out;
+}
+/* Optional: Add a fade-in animation for a smoother appearance */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+

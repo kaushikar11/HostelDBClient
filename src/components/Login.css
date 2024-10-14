@@ -1,0 +1,113 @@
+/* Overall container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+  }
+  
+  /* Login card styling */
+  .login-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  /* Form title */
+  .login-card h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Input container */
+  .input-container {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  /* Input fields */
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:focus {
+    border-color: #5cb85c; /* Green border on focus */
+    outline: none;
+  }
+  
+  /* Label */
+  label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  /* Error message */
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Login button */
+  .login-button {
+    width: 100%;
+    background-color: #5cb85c; /* Green button */
+    color: #fff;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #4cae4c; /* Darker green on hover */
+  }
+  
+  /* Responsive for small screens */
+  @media (max-width: 768px) {
+    .login-card {
+      padding: 1.5rem;
+    }
+  
+    .login-card h2 {
+      font-size: 20px;
+    }
+  
+    input, .login-button {
+      padding: 10px 14px;
+    }
+  }
+  
+  .password-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggle-password {
+    background: none; /* No background */
+    border: none; /* Remove border */
+    color: #007BFF; /* Blue color for the button */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    margin-left: 10px; /* Space between input and button */
+    font-size: 0.9rem; /* Slightly smaller font */
+  }
+  
+  .toggle-password:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
