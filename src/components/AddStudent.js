@@ -4,10 +4,14 @@ import Axios from 'axios';
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore"; 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from './firebase/firebase'; // Ensure correct import path for your Firebase configuration
+import { useDispatch } from 'react-redux';
+import { addStudent, sendStudentDataToServer } from './Thunk/actions'; // Ensure correct import
 
 const URL = process.env.REACT_APP_SERVER_URL;
 
+
 const AddStudent = () => {
+    const dispatch = useDispatch();  // ADD THIS
     const [currentStep, setCurrentStep] = useState(1);
     const [photoLabel, setPhotoLabel] = useState('Choose file...');
     const [photoError, setPhotoError] = useState('');
@@ -141,6 +145,8 @@ const AddStudent = () => {
                     photoURL: photoURL
                 });
             }
+            dispatch(addStudent(formData, selectedFile));  // Dispatch Redux action for adding student
+            dispatch(sendStudentDataToServer(formData));
 
             // Reset form state or navigate somewhere else
             setFormData({

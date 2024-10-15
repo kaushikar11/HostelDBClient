@@ -6,7 +6,7 @@ import { getDownloadURL, ref } from 'firebase/storage'; // Import required Fireb
 import './StudentDetails.css';
 import { generatePDF } from './functions/generatePDF';
 import { useDispatch, useSelector } from 'react-redux';
-import { startGeneratingPDF } from './pdfThunk/actions';
+import { startGeneratingPDF } from './Thunk/actions';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 

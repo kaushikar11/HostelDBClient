@@ -1,7 +1,7 @@
 // src/generatePDF.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { latexTemplate } from '../latexTemplate/latexTemplate'; // Import LaTeX template
-import { setProgress } from '../pdfThunk/pdfSlice';
+import { setProgress } from '../Thunk/Slice';
 
 // src/generatePDF.js
 export const generatePDF = createAsyncThunk(
