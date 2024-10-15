@@ -10,14 +10,14 @@ export const startGeneratingPDF = (payload) => async (dispatch) => {
 
     if (generatePDF.fulfilled.match(result)) {
       console.log('PDF generated successfully:', result.payload.pdfUrl);
-      return result; // Return the result so it can be used in handleDownloadPDF
+      return result; 
     } else {
       console.error('PDF generation failed');
-      return null; // Return null if PDF generation failed
+      return null; 
     }
   } catch (error) {
     console.error('Error generating PDF:', error);
-    return null; // Return null on error
+    return null; 
   }
 };
 
