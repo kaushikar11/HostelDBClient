@@ -1,0 +1,225 @@
+.student-details-container {
+  min-height: calc(100vh - 70px);
+  padding: 120px 20px 30px 20px;
+  background: transparent;
+}
+
+.student-details {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--cream-primary);
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 16px var(--shadow-hover);
+  padding: 40px;
+}
+
+.student-details-header {
+  border-bottom: 3px solid var(--dark-red);
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-details-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.student-image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.student-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 3px solid var(--dark-red);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.student-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.student-info-item {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-info-item strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.student-info-item span {
+  font-size: 14px;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.student-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.student-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-form label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.student-form input,
+.student-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  background-color: var(--white);
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.student-form input:focus,
+.student-form textarea:focus {
+  outline: none;
+  border-color: var(--dark-red);
+  box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1);
+}
+
+.student-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.student-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  padding-top: 30px;
+  border-top: 2px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.student-actions button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+.student-actions button.btn-primary {
+  background-color: var(--dark-red);
+  color: var(--white);
+}
+
+.student-actions button.btn-primary:hover {
+  background-color: var(--dark-red-light);
+  box-shadow: 0 4px 8px var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.student-actions button.btn-danger {
+  background-color: #C62828;
+  color: var(--white);
+}
+
+.student-actions button.btn-danger:hover {
+  background-color: #B71C1C;
+  box-shadow: 0 4px 8px var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.student-actions button.btn-secondary {
+  background-color: var(--cream-dark);
+  color: var(--dark-red);
+}
+
+.student-actions button.btn-secondary:hover {
+  background-color: var(--cream-primary);
+  box-shadow: 0 4px 8px var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.loading-container {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: var(--cream-primary);
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 16px var(--shadow-hover);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.loading-container p {
+  margin-top: 20px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .student-details {
+    padding: 20px;
+  }
+
+  .student-details-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .student-details-header h1 {
+    font-size: 20px;
+  }
+
+  .student-info {
+    grid-template-columns: 1fr;
+  }
+
+  .student-form {
+    grid-template-columns: 1fr;
+  }
+
+  .student-actions {
+    flex-direction: column;
+  }
+
+  .student-actions button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,143 @@
+/* Title in top left corner */
+.navbar-title-corner {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2000;
+  background-color: transparent;
+}
+
+.navbar-title-corner .navbar-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Navigation menu in top right corner */
+.navbar-menu-corner {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* TCE Logo in center */
+.tce-logo-center {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.tce-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.navbar {
+  background-color: var(--dark-red);
+  border-bottom: 3px solid var(--dark-red-dark);
+  box-shadow: 0 2px 8px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 70px;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-link {
+  display: inline-block;
+  padding: 10px 20px;
+  color: var(--white);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--cream-primary);
+}
+
+.navbar-button {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navbar-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--white);
+  transform: translateY(-1px);
+}
+
+.navbar-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+
+  .navbar-title {
+    font-size: 16px;
+  }
+
+  .navbar-menu {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .navbar-link,
+  .navbar-button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}

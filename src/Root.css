@@ -1,0 +1,97 @@
+.root-container {
+  min-height: calc(100vh - 80px);
+  padding: 120px 20px 30px 20px;
+  background-color: transparent;
+}
+
+.root-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.root-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: var(--cream-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.root-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.search-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: var(--cream-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.loading-container {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: var(--cream-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.loading-container p {
+  margin-top: 20px;
+  color: var(--white);
+  font-size: 16px;
+}
+
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  font-size: 16px;
+}
+
+.student-photo {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+.no-photo {
+  width: 50px;
+  height: 50px;
+  background-color: var(--gray-light);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .root-header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .root-title {
+    font-size: 20px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+}
