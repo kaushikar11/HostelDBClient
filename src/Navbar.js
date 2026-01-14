@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <>
       <div className="navbar-title-corner">
-        <span className="navbar-title">Ladies Hostel Database</span>
+        <span className="navbar-title">Hostel Database</span>
       </div>
       <div className="tce-logo-center">
         <img src="/tce-logo.png" alt="TCE Logo" className="tce-logo" />

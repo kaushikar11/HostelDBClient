@@ -41,7 +41,7 @@ const Login = ({ user }) => {
     <div className="login-page">
       <div className="login-container">
         <div className="login-header">
-          <h1 className="login-title">Ladies Hostel Database</h1>
+          <h1 className="login-title">Hostel Database</h1>
           <p className="login-subtitle">Administrative Portal</p>
         </div>
 
