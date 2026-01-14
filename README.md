@@ -43,37 +43,34 @@ This is a React-based single-page application built with Create React App. It pr
    npm install
    ```
 
-3. **Configure Firebase**
+3. **Configure environment variables**
    
-   Update `src/firebase.js` with your Firebase configuration:
-   ```javascript
-   const firebaseConfig = {
-     apiKey: "YOUR_API_KEY",
-     authDomain: "YOUR_AUTH_DOMAIN",
-     projectId: "YOUR_PROJECT_ID",
-     storageBucket: "YOUR_STORAGE_BUCKET",
-     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-     appId: "YOUR_APP_ID",
-     measurementId: "YOUR_MEASUREMENT_ID"
-   };
-   ```
-   
-   To get your Firebase config:
-   1. Go to [Firebase Console](https://console.firebase.google.com/)
-   2. Select your project
-   3. Go to Project Settings → General
-   4. Scroll down to "Your apps" and copy the config
-
-4. **Configure environment variables (Optional)**
-   
-   Create a `.env` file in the `client` directory:
+   Create a `.env` file in the `client` directory (you can copy `.env.example` as a template):
    ```env
+   # Server API URL
    REACT_APP_SERVER_URL=http://localhost:3001/api/students
+   
+   # Firebase Configuration
+   REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
+   REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+   REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   REACT_APP_FIREBASE_APP_ID=your_app_id
+   REACT_APP_FIREBASE_MEASUREMENT_ID=your_measurement_id
+   
+   # Public URL for assets (leave empty for root deployment)
    PUBLIC_URL=
    ```
    
-   - `REACT_APP_SERVER_URL`: Backend API URL (defaults to `http://localhost:3001/api/students`)
-   - `PUBLIC_URL`: Public URL for assets (leave empty for root deployment)
+   **To get Firebase configuration:**
+   1. Go to [Firebase Console](https://console.firebase.google.com/)
+   2. Select your project
+   3. Go to Project Settings → General
+   4. Scroll down to "Your apps" and copy the config values
+   5. Paste them into your `.env` file
+   
+   **Note:** All React environment variables must be prefixed with `REACT_APP_` to be accessible in the browser.
 
 ## Available Scripts
 
@@ -214,6 +211,13 @@ Set in Vercel dashboard → Settings → Environment Variables:
 
 3. **Set Environment Variables**
    - `REACT_APP_SERVER_URL`: Your server API URL
+   - `REACT_APP_FIREBASE_API_KEY`: Your Firebase API key
+   - `REACT_APP_FIREBASE_AUTH_DOMAIN`: Your Firebase auth domain
+   - `REACT_APP_FIREBASE_PROJECT_ID`: Your Firebase project ID
+   - `REACT_APP_FIREBASE_STORAGE_BUCKET`: Your Firebase storage bucket
+   - `REACT_APP_FIREBASE_MESSAGING_SENDER_ID`: Your Firebase messaging sender ID
+   - `REACT_APP_FIREBASE_APP_ID`: Your Firebase app ID
+   - `REACT_APP_FIREBASE_MEASUREMENT_ID`: Your Firebase measurement ID
    - `PUBLIC_URL`: (leave empty)
 
 4. **Deploy**
@@ -236,9 +240,11 @@ The app can be deployed to any static hosting service:
 - Check for syntax errors in console
 
 ### Authentication Issues
-- Verify Firebase configuration in `firebase.js`
+- Verify Firebase configuration in `.env` file
+- Check that all `REACT_APP_FIREBASE_*` variables are set correctly
 - Check Firebase console for authentication rules
 - Ensure Email/Password authentication is enabled
+- Restart the development server after changing `.env` variables (React requires restart to pick up new env vars)
 
 ### API Connection Issues
 - Verify `REACT_APP_SERVER_URL` is set correctly
