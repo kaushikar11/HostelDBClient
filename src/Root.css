@@ -4,6 +4,19 @@
   background-color: transparent;
 }
 
+/* Make all text red inside root container boxes */
+.root-header,
+.root-header *,
+.table-container,
+.table-container * {
+  color: var(--dark-red) !important;
+}
+
+/* Exception for table cells - keep dark text for readability */
+.table-container .table tbody td {
+  color: var(--text-primary) !important;
+}
+
 .root-content {
   max-width: 1400px;
   margin: 0 auto;
@@ -23,7 +36,7 @@
 .root-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0;
@@ -37,6 +50,11 @@
   box-shadow: 0 2px 8px var(--shadow);
 }
 
+.search-section,
+.search-section * {
+  color: var(--dark-red) !important;
+}
+
 .loading-container {
   text-align: center;
   padding: 60px 20px;
@@ -45,18 +63,28 @@
   box-shadow: 0 2px 8px var(--shadow);
 }
 
+.loading-container,
+.loading-container * {
+  color: var(--dark-red) !important;
+}
+
 .loading-container p {
   margin-top: 20px;
-  color: var(--white);
+  color: var(--dark-red) !important;
   font-size: 16px;
 }
 
 .empty-state {
   padding: 60px 20px;
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--white);
+  background-color: var(--cream-primary);
+  border: 1px solid var(--border-color);
+  color: var(--dark-red) !important;
   font-size: 16px;
+}
+
+.empty-state * {
+  color: var(--dark-red) !important;
 }
 
 .student-photo {

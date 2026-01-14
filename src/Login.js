@@ -34,7 +34,7 @@ const Login = ({ user }) => {
   const handlePasswordChange = (event) => setPassword(event.target.value);
 
   if (user) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/home" replace />;
   }
 
   return (

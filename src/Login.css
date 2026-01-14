@@ -18,6 +18,14 @@
   backdrop-filter: blur(2px);
 }
 
+.login-container * {
+  color: var(--dark-red) !important;
+}
+
+.login-container .form-control {
+  color: var(--text-primary) !important;
+}
+
 .login-header {
   text-align: center;
   margin-bottom: 30px;
@@ -33,7 +41,7 @@
 .login-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0 0 8px 0;
@@ -41,7 +49,7 @@
 
 .login-subtitle {
   font-size: 14px;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
@@ -101,7 +109,7 @@
   margin-bottom: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

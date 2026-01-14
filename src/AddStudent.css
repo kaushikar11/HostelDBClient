@@ -4,6 +4,20 @@
   background: transparent;
 }
 
+/* Make all text red inside add student form wrapper */
+.add-student-form-wrapper,
+.add-student-form-wrapper * {
+  color: var(--dark-red) !important;
+}
+
+/* Exception for form inputs - keep dark text for readability */
+.add-student-form-wrapper .form-control,
+.add-student-form-wrapper input,
+.add-student-form-wrapper textarea,
+.add-student-form-wrapper select {
+  color: var(--text-primary) !important;
+}
+
 .add-student-form-wrapper {
   max-width: 1000px;
   margin: 0 auto;
@@ -22,7 +36,7 @@
 .form-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0;
@@ -62,7 +76,7 @@
 .form-section-title {
   font-size: 20px;
   font-weight: 700;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 25px;
@@ -79,7 +93,7 @@
   margin-bottom: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--white);
+  color: var(--dark-red) !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -136,7 +150,7 @@
   border-radius: 0;
   background-color: var(--white);
   font-size: 14px;
-  color: var(--text-primary);
+  color: var(--dark-red) !important;
   cursor: pointer;
   transition: border-color 0.2s ease;
 }
@@ -178,7 +192,7 @@
 .radio-label {
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--dark-red) !important;
   cursor: pointer;
   margin: 0;
   text-transform: none;

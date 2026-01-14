@@ -38,6 +38,16 @@ body {
   color: var(--white) !important;
 }
 
+/* Exception: Text inside login container should be red */
+.login-container h1,
+.login-container p,
+.login-container label,
+.login-container .login-title,
+.login-container .login-subtitle,
+.login-container .form-label {
+  color: var(--dark-red) !important;
+}
+
 /* Form inputs and textareas keep dark text for readability */
 input, textarea, select, .form-control, input.form-control, textarea.form-control, select.form-control {
   color: var(--text-primary) !important;
@@ -150,7 +160,7 @@ button, .navbar-button, .navbar-link, .toggle-button {
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: var(--white);
+  color: var(--dark-red) !important;
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -259,14 +269,18 @@ textarea.form-control {
 
 /* Error Message */
 .error-message {
-  background-color: #FFEBEE;
-  border: 1px solid #C62828;
+  background-color: var(--cream-primary);
+  border: 2px solid var(--dark-red);
   border-radius: 0;
-  color: #C62828;
+  color: var(--dark-red) !important;
   padding: 12px 16px;
   margin-bottom: 20px;
   font-size: 14px;
   font-weight: 500;
+}
+
+.error-message * {
+  color: var(--dark-red) !important;
 }
 
 /* Success Message */

@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Login from './Login';
 import Root from './Root';
@@ -72,6 +72,7 @@ const App = () => {
             <Route path="/home" element={<ProtectedRoute user={user}><Root/></ProtectedRoute>} />
             <Route path="/add-student" element={<ProtectedRoute user={user}><AddStudent/></ProtectedRoute>} />
             <Route path="/student/:id" element={<ProtectedRoute user={user}><StudentDetails/></ProtectedRoute>} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </div>
