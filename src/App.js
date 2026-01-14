@@ -16,16 +16,26 @@ const App = () => {
   const [isFetching, setIsFetching] = useState(true);
   
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
+    try {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUser(user);
+          setIsFetching(false);
+          return;
+        }
+        setUser(null);
         setIsFetching(false);
-        return;
-      }
+      }, (error) => {
+        console.error('Auth state change error:', error);
+        setUser(null);
+        setIsFetching(false);
+      });
+      return () => unsubscribe();
+    } catch (error) {
+      console.error('Auth initialization error:', error);
       setUser(null);
       setIsFetching(false);
-    });
-    return () => unsubscribe();
+    }
   }, []);
 
 
