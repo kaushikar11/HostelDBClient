@@ -6,8 +6,6 @@ import './Navbar.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const publicUrl = process.env.PUBLIC_URL || '';
-
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
@@ -23,7 +21,7 @@ const Navbar = () => {
         <span className="navbar-title">Ladies Hostel Database</span>
       </div>
       <div className="tce-logo-center">
-        <img src={`${publicUrl}/tce-logo.png`} alt="TCE Logo" className="tce-logo" />
+        <img src="/tce-logo.png" alt="TCE Logo" className="tce-logo" />
       </div>
       <div className="navbar-menu-corner">
         <Link to="/home" className="navbar-link">Home</Link>

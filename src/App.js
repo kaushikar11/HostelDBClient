@@ -39,9 +39,9 @@ const App = () => {
   }, []);
 
 
-  const publicUrl = process.env.PUBLIC_URL || '';
+  // Use relative path for public assets - works in both dev and production
   const backgroundImageStyle = {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${publicUrl}/ladies-hostel.jpeg)`
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/ladies-hostel.jpeg)`
   };
 
   if (isFetching) {
